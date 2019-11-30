@@ -6,6 +6,8 @@
     <string name="subtitle_howto">Below is a list of explanations for the different tasks.</string>
     <string name="title_scores">Top Scores</string>
     <string name="subtitle_scores">Here you can find the scores for each game played.</string>
+    <string name="title_whopit">Time to Play!</string>
+    <string name="subtitle_whopit">Follow the instructions, and try to get a high score!</string>
 
     <string name="but_howto">How To</string>
     <string name="but_start">Start</string>
@@ -17,4 +19,6 @@
     <string name="instruct_twist">- To "Twist It!", rotate your phone longways.</string>
     <string name="instruct_shake">- To "Shake It!", move the phone back and forth rapidly.</string>
     <string name="instruct_playfast">- Each time you get it correct, you get a point! Be careful though, take too long and the game will be over!</string>
+
+    <string name="text_whopit">Instruction</string>
 </resources>
