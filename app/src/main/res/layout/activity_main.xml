@@ -7,7 +7,56 @@
     tools:context=".Main">
 
     <LinearLayout android:id="@+id/layout_title"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_main"
+            android:textSize="30sp"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/subtitle_main"
+            android:textSize="16sp"
+            android:gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/layout_title"
+        app:layout_constraintBottom_toTopOf="@id/layout_navigation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+        <Button android:id="@+id/but_start"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/but_start"
+            android:textSize="30sp"
+            android:paddingHorizontal="100sp"
+            android:paddingVertical="70sp"/>
+    </LinearLayout>
+    <LinearLayout android:id="@+id/layout_navigation"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+        <Button android:id="@+id/but_howTo"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/but_howto"/>
+        <Button android:id="@+id/but_scores"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/but_scores"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

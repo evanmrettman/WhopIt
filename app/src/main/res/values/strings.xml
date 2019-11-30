@@ -13,8 +13,8 @@
     <string name="but_reset">Reset Scores</string>
     <string name="but_return">Return</string>
 
-    <string name="instruct_whop">To "Whop It!", tap your phone screen.</string>
-    <string name="instruct_twist">To "Twist It!", rotate your phone longways.</string>
-    <string name="instruct_shake">To "Shake It!", move the phone back and forth rapidly.</string>
-    <string name="instruct_playfast">Each time you get it correct, you get a point! Be careful though, take too long and the game will be over!</string>
+    <string name="instruct_whop">- To "Whop It!", tap your phone screen.</string>
+    <string name="instruct_twist">- To "Twist It!", rotate your phone longways.</string>
+    <string name="instruct_shake">- To "Shake It!", move the phone back and forth rapidly.</string>
+    <string name="instruct_playfast">- Each time you get it correct, you get a point! Be careful though, take too long and the game will be over!</string>
 </resources>
