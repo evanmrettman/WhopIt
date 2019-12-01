@@ -10,7 +10,7 @@ import java.util.Random;
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     final private Random rand = new Random();
     final private static String DB_NAME = "whopit";
-    final private static Integer VERSION = 4;
+    final private static Integer VERSION = 5;
     final private Context context;
     final private static String CREATE_CMD =
             String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s INTEGER DEFAULT -1, %s INTEGER DEFAULT 0);",
@@ -42,7 +42,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         for(int i = 0; i < 20; i++)
         {
             ContentValues cv = new ContentValues();
-            cv.put(Main.COLUMNS[1],i);
+            cv.put(Main.COLUMNS[1],i+1);
             cv.put(Main.COLUMNS[2],rand.nextInt(100));
             db.insert(Main.TABLE,null,cv);
         }
