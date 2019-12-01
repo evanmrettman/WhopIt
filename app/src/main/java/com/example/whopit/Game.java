@@ -1,8 +1,9 @@
 package com.example.whopit;
 
+import java.io.Serializable;
 import java.util.Locale;
 
-public class Game implements Comparable<Game>
+public class Game implements Comparable<Game>, Serializable
 {
     int num = -1;
     int score = 0;
