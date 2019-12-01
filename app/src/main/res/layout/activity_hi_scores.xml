@@ -24,18 +24,21 @@
         android:textSize="16sp"
         android:gravity="center"/>
     </LinearLayout>
+
     <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10sp"
-    app:layout_constraintTop_toBottomOf="@id/layout_title"
-    app:layout_constraintBottom_toTopOf="@id/layout_navigation"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent">
-    <ListView android:id="@+id/lv_scores"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10sp"
+        android:layout_gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_title"
+        app:layout_constraintBottom_toTopOf="@id/layout_navigation">
+
+        <ListView
+            android:id="@+id/lv_scores"
+            android:layout_width="match_parent"
+            android:layout_height="504dp" />
     </LinearLayout>
     <LinearLayout android:id="@+id/layout_navigation"
     android:orientation="horizontal"
@@ -44,7 +47,6 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent">
     <Button android:id="@+id/but_return"
-        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/but_return"/>
