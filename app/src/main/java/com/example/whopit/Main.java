@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -39,6 +40,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
+                gamesPlayed += 1;
                 Intent i = new Intent(getApplicationContext(),WhopIt.class);
                 startActivityForResult(i,0);
             }
@@ -49,6 +51,9 @@ public class Main extends AppCompatActivity {
             public void onClick(View v)
             {
                 Intent i = new Intent(getApplicationContext(),HiScores.class);
+                Bundle extras = new Bundle();
+                extras.putSerializable("arraylist",games);
+                i.putExtra("bundle",extras);
                 startActivity(i);
             }
         });
@@ -69,10 +74,14 @@ public class Main extends AppCompatActivity {
         if(resultCode == RESULT_OK && requestCode == 0)
         {
             if(data == null)
+            {
+                Log.i("games","data returned as null");
                 return;
+            }
             ContentValues cv = new ContentValues();
-            cv.put(COLUMNS[1],data.getIntExtra("game",-1));
+            cv.put(COLUMNS[1],gamesPlayed);
             cv.put(COLUMNS[2],data.getIntExtra("score",0));
+            Log.i("games","game #" +gamesPlayed+" @ "+cv.get(COLUMNS[2]));
             db.insert(TABLE,null,cv);
             updateList();
         }
@@ -91,7 +100,7 @@ public class Main extends AppCompatActivity {
             games.add(new Game(curr_game,curr_score));
         }
         c.close();
-        Collections.sort(games);
+        Collections.sort(games, Collections.<Game>reverseOrder());
     }
 
 }
