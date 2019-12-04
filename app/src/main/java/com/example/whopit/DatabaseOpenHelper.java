@@ -10,7 +10,7 @@ import java.util.Random;
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     final private Random rand = new Random();
     final private static String DB_NAME = "whopit";
-    final private static Integer VERSION = 5;
+    final private static Integer VERSION = 11;
     final private Context context;
     final private static String CREATE_CMD =
             String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s INTEGER DEFAULT -1, %s INTEGER DEFAULT 0);",
@@ -24,7 +24,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CMD);
-        addDefaults(db);
+        //addDefaults(db); // For testing
     }
 
     @Override
