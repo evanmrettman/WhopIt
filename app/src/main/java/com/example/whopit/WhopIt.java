@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -43,11 +44,32 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
 
     private long mTimeBetweenInstructions; // this will get smaller as the game goes on
 
+    private MediaPlayer sound_nice1;
+    private MediaPlayer sound_nice2;
+    private MediaPlayer sound_great1;
+    private MediaPlayer sound_whopit;
+    private MediaPlayer sound_twistit;
+    private MediaPlayer sound_shakeit;
+    private MediaPlayer sound_oof;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_whop_it);
+
+
+        // Sounds
+        sound_nice1 = MediaPlayer.create(WhopIt.this,R.raw.nice1);
+        sound_nice2 = MediaPlayer.create(WhopIt.this,R.raw.nice2);
+        sound_great1 = MediaPlayer.create(WhopIt.this,R.raw.great1);
+        sound_whopit = MediaPlayer.create(WhopIt.this,R.raw.whopit);
+        sound_twistit = MediaPlayer.create(WhopIt.this,R.raw.twistit);
+        sound_shakeit = MediaPlayer.create(WhopIt.this,R.raw.shakeit);
+        sound_oof = MediaPlayer.create(WhopIt.this,R.raw.oof);
+
+
 
         // Time between instructions (miliseconds)
         mTimeBetweenInstructions = 4000;
@@ -187,10 +209,47 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
                     txt_instruction.setText("Nice!");
                 }
             });
+            playNice();
             System.out.println("Correct answer!: " + answer);
         }
         else{
             System.out.println("Wrong answer!: " + answer);
+        }
+    }
+
+    private void playNice(){
+        int c = (int)(Math.random()*3);
+        switch(c){
+            case 0:
+                sound_nice1.start();
+                break;
+            case 1:
+                sound_nice2.start();
+                break;
+            case 2:
+                sound_great1.start();
+                break;
+            default:
+                sound_nice2.start();
+        }
+    }
+
+    private void playGameOver(){
+        sound_oof.start();
+    }
+
+    private void playInstruction(int i){
+        switch(i){
+            case 1:
+                sound_whopit.start();
+                break;
+            case 2:
+                sound_shakeit.start();
+                break;
+            case 3:
+                sound_twistit.start();
+                break;
+            default:
         }
     }
 
@@ -205,6 +264,7 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
         // 1 - Whop It!
         // 2 - Shake It!
         // 3 - Twist It!
+        playInstruction(currentInstruction);
         runOnUiThread(new Runnable() {
             // Updates to UI outside of main thread
             @Override
@@ -274,6 +334,9 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
 
                         // Game over handling
                         currentInstruction = 0;
+
+                        // play sound for game over
+                        playGameOver();
 
                         runOnUiThread(new Runnable() {
 
