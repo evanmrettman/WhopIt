@@ -49,11 +49,14 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent">
-            <Button android:id="@+id/but_return"
-                android:layout_weight="1"
+
+            <Button
+                android:id="@+id/but_return"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/but_return"/>
+                android:layout_weight="1"
+                android:text="@string/but_return"
+                android:visibility="invisible" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

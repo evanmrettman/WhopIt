@@ -52,13 +52,16 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
     private MediaPlayer sound_shakeit;
     private MediaPlayer sound_oof;
 
+    final double TWIST_SUBTRACTION_MULTIPLIER = 2; //substracts amount of twist from amount of shake
+    final double SHAKE_THRESHOLD = 1.25; //amount of shake - (twist amount * mult) needed to trigger
+    final double TWIST_THRESHOLD = 4.5; //amount of twist needed to trigger
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_whop_it);
-
 
         // Sounds
         sound_nice1 = MediaPlayer.create(WhopIt.this,R.raw.nice1);
@@ -121,13 +124,14 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
 
         //DEBUG
         System.out.println("Current main thread: " + Thread.currentThread());
-        // START THE GAM
+        // START THE GAME
         nextInstruction();
 
     }
 
+    // When a movement is detected
     public void onSensorChanged(SensorEvent event) {
-        // Accelerometer event
+        // Accelerometer event (for shaking)
         if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             long actualTime = System.currentTimeMillis();
             if (actualTime  - mLastAccelerationUpdate > 50)  {
@@ -137,10 +141,12 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
 
                 float acceleration = Math.abs(x) + Math.abs(y) + Math.abs(z);
 
-                if((Math.abs(acceleration - mLastAcceleration) - (mLastRotation*3)) > 1.5){
+                // determine if a shake occured
+                //if((Math.abs(acceleration - mLastAcceleration) - (mLastRotation*3)) > 1.5){
+                if((Math.abs(acceleration - mLastAcceleration) - (mLastRotation*TWIST_SUBTRACTION_MULTIPLIER)) > SHAKE_THRESHOLD){
                     System.out.println("Shook it!");
                     answer(ANS_SHAKE);
-                    System.out.println("|" + acceleration + " - " + mLastAcceleration + "| - " + mLastRotation*3);
+                    System.out.println("|" + acceleration + " - " + mLastAcceleration + "| - " + mLastRotation*TWIST_SUBTRACTION_MULTIPLIER);
                 }
 
                 mLastAcceleration = acceleration;
@@ -156,7 +162,7 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
             }
         }
 
-        // Rotation event
+        // Rotation event (for twisting)
         if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
             long actualTime = System.currentTimeMillis();
             if (actualTime  - mLastRotationUpdate > 50)  {
@@ -166,7 +172,7 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
 
                 mLastRotation = Math.abs(x) + Math.abs(y) + Math.abs(z);
 
-                if(mLastRotation > 3){
+                if(mLastRotation > TWIST_THRESHOLD){
                     System.out.println("Twisted it!");
                     answer(ANS_TWIST);
                 }
@@ -198,10 +204,16 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
         super.onPause();
     }
 
+    // Called when giving an answer
     private void answer(int answer){
         if(answer == currentInstruction) {
+            // reset instruction
             currentInstruction = 0;
+
+            // increase score
             score++;
+
+            // give feedback
             runOnUiThread(new Runnable() {
                 // Updates to UI outside of main thread
                 @Override
@@ -217,36 +229,53 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
         }
     }
 
+    // plays a random sound of congratulations
     private void playNice(){
         int c = (int)(Math.random()*3);
         switch(c){
             case 0:
+                sound_nice1.release();
+                sound_nice1 = MediaPlayer.create(WhopIt.this,R.raw.nice1);
                 sound_nice1.start();
                 break;
             case 1:
+                sound_nice2.release();
+                sound_nice2 = MediaPlayer.create(WhopIt.this,R.raw.nice2);
                 sound_nice2.start();
                 break;
             case 2:
+                sound_great1.release();
+                sound_great1 = MediaPlayer.create(WhopIt.this,R.raw.great1);
                 sound_great1.start();
                 break;
             default:
-                sound_nice2.start();
+                //sound_nice2.start();
         }
     }
 
+    // plays game over sound
     private void playGameOver(){
+        sound_oof.release();
+        sound_oof = MediaPlayer.create(WhopIt.this,R.raw.oof);
         sound_oof.start();
     }
 
+    // plays sound of given instruction number
     private void playInstruction(int i){
         switch(i){
             case 1:
+                sound_whopit.release();
+                sound_whopit = MediaPlayer.create(WhopIt.this,R.raw.whopit);
                 sound_whopit.start();
                 break;
             case 2:
+                sound_shakeit.release();
+                sound_shakeit = MediaPlayer.create(WhopIt.this,R.raw.shakeit);
                 sound_shakeit.start();
                 break;
             case 3:
+                sound_twistit.release();
+                sound_twistit = MediaPlayer.create(WhopIt.this,R.raw.twistit);
                 sound_twistit.start();
                 break;
             default:
@@ -264,7 +293,7 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
         // 1 - Whop It!
         // 2 - Shake It!
         // 3 - Twist It!
-        playInstruction(currentInstruction);
+        //playInstruction(currentInstruction);
         runOnUiThread(new Runnable() {
             // Updates to UI outside of main thread
             @Override
@@ -281,10 +310,12 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
                         break;
                     case 0:
                     default:
-                        txt_instruction.setText("...");
+                        txt_instruction.setText("Whop It?");
+                        currentInstruction=1;
                 }
             }
         });
+        playInstruction(currentInstruction);
 
 
         // Start countdown
@@ -344,13 +375,25 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
                             @Override
                             public void run() {
                                 txt_instruction.setText("Game over! You got " + score + " points!");
+                                but_return.setVisibility(View.VISIBLE);
                             }
                         });
                     }
                     else{
                         System.out.println("Nice!");
-                        if(mTimeBetweenInstructions > 750) {
+                        if(mTimeBetweenInstructions > 1750) {
                             mTimeBetweenInstructions -= 150;
+                            System.out.println("Level 1");
+                        }
+                        else if(mTimeBetweenInstructions > 1400) {
+                            // Once we get to level 2, things get really hard
+                            mTimeBetweenInstructions -= 25;
+                            System.out.println("Level 2!");
+                        }
+                        else{
+                            // from here the game gets progressively harder forever
+                            mTimeBetweenInstructions -= 10;
+                            System.out.println("Level 3!!!");
                         }
                         runOnUiThread(new Runnable() {
                             // Updates to UI outside of main thread
@@ -359,7 +402,7 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
                                 txt_instruction.setText("Nice!...");
                             }
                         });
-                        Thread.sleep(100);
+                        Thread.sleep(250);
                         nextInstruction(); // Call for the next instruction
                     }
                 } catch (InterruptedException e) {
@@ -389,7 +432,9 @@ public class WhopIt extends AppCompatActivity implements SensorEventListener
     @Override
     public void onBackPressed()
     {
-        returnScore();
-        super.onBackPressed();
+        if (currentInstruction == 0){
+            returnScore();
+            super.onBackPressed();
+        }
     }
 }
